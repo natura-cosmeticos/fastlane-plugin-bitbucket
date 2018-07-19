@@ -8,14 +8,13 @@ module Fastlane
         action = params[:action]
         request_id = params[:request_id]
         if action == 'comment' then
-          UI.message("Should Comment on Request: " << request_id.to_s)
           Helper::BitbucketHelper.comment_pull_request(params[:access_token], params[:base_url], params[:project_key], params[:repo_slug], params[:request_id], params[:message])
         elsif action == 'decline' then
-          UI.message("Should Decline Request: " << request_id.to_s)
           Helper::BitbucketHelper.decline_pull_request(params[:access_token], params[:base_url], params[:project_key], params[:repo_slug], params[:request_id])
         elsif action == 'approve' then
-          UI.message("Should Approve Request: " << request_id.to_s)
           Helper::BitbucketHelper.approve_pull_request(params[:access_token], params[:base_url], params[:project_key], params[:repo_slug], params[:request_id])
+        elsif action == 'fetch' then
+          Helper::BitbucketHelper.fetch_pull_request(params[:access_token], params[:base_url], params[:project_key], params[:repo_slug], params[:request_id])
         else
           UI.user_error!("The action must be one of: comment, approve, decline")
         end
@@ -70,11 +69,11 @@ module Fastlane
           FastlaneCore::ConfigItem.new(
             key: :action,
             description: "The action to perform",
-            default_value: "comment",
+            default_value: "fetch",
             type: String,
             optional: true,
             verify_block: proc do |value|
-              UI.user_error!("Action should be one of the following: approve, decline, comment") unless ["approve", "decline", "comment"].include? value
+              UI.user_error!("Action should be one of the following: approve, decline, comment") unless ["approve", "decline", "comment", "fetch"].include? value
             end
           ),
           FastlaneCore::ConfigItem.new(

@@ -36,10 +36,15 @@ module Fastlane
         res
       end
 
-      def self.get_pull_request_version(access_token, baseurl, project_key, repo_slug, request_id)
+      def self.fetch_pull_request(access_token, baseurl, project_key, repo_slug, request_id)
         pruri = URI.parse("#{baseurl}/rest/api/1.0/projects/#{project_key}/repos/#{repo_slug}/pull-requests/#{request_id}")
         prresp = self.perform_get(pruri, access_token, {})
         data = JSON.parse(prresp.body)
+        data
+      end
+
+      def self.get_pull_request_version(access_token, baseurl, project_key, repo_slug, request_id)
+        data = self.fetch_pull_request(access_token, baseurl, project_key, repo_slug, request_id)
         version = data["version"]
         version
       end
