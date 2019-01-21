@@ -29,8 +29,10 @@ module Fastlane
           Helper::BitbucketHelper.approve_pull_request(auth_header, params[:base_url], params[:project_key], params[:repo_slug], params[:request_id])
         elsif action == 'fetch' then
           Helper::BitbucketHelper.fetch_pull_request(auth_header, params[:base_url], params[:project_key], params[:repo_slug], params[:request_id])
+        elsif action == 'update_user_status' then
+          Helper::BitbucketHelper.update_user_status(auth_header, params[:base_url], params[:project_key], params[:repo_slug], params[:request_id], params[:user_slug], params[:status])
         else
-          UI.user_error!("The action must be one of: comment, approve, decline")
+          UI.user_error!("The action must be one of: comment, approve, decline, fetch, or update_user_status")
         end
       end
 
@@ -94,7 +96,7 @@ module Fastlane
             type: String,
             optional: true,
             verify_block: proc do |value|
-              UI.user_error!("Action should be one of the following: approve, decline, comment") unless ["approve", "decline", "comment", "fetch"].include? value
+              UI.user_error!("Action should be one of the following: approve, decline, comment") unless ["approve", "decline", "comment", "fetch", "update_user_status"].include? value
             end
           ),
           FastlaneCore::ConfigItem.new(
@@ -109,6 +111,22 @@ module Fastlane
             description: "The pull request id number",
             type: Integer,
             optional: false
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :user_slug,
+            description: "The user slug to update status for",
+            type: String,
+            optional: true
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :status,
+            description: "The status to set for the user (used in update_user_status request)",
+            type: String,
+            optional: true,
+            default_value: "NEEDS_WORK",
+            verify_block: proc do |value|
+              UI.user_error!("Status should be one of UNAPPROVED, NEEDS_WORK, APPROVED") unless ["UNAPPROVED", "APPROVED", "NEEDS_WORK"].include? value
+            end
           )
         ]
       end

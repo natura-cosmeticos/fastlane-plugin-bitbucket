@@ -41,6 +41,24 @@ module Fastlane
         res
       end
 
+      def self.perform_put(uri, access_header, params, query_params={})
+        uri.query = URI.encode_www_form(query_params)
+
+        req = Net::HTTP::Put.new(uri, 'Content-Type' => 'application/json')
+        req['Authorization'] = access_header
+        req['Accept'] = 'application/json'
+        req.body = params.to_json
+        
+        http = Net::HTTP.new(uri.host, uri.port)
+        
+        http.use_ssl = uri.instance_of? URI::HTTPS
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+        res = http.request(req)
+
+        res
+      end
+
       def self.fetch_pull_request(access_header, baseurl, project_key, repo_slug, request_id)
         pruri = URI.parse("#{baseurl}/rest/api/1.0/projects/#{project_key}/repos/#{repo_slug}/pull-requests/#{request_id}")
         prresp = self.perform_get(pruri, access_header, {})
@@ -72,6 +90,13 @@ module Fastlane
         uri = URI.parse("#{baseurl}/rest/api/1.0/projects/#{project_key}/repos/#{repo_slug}/pull-requests/#{request_id}/comments")
         self.perform_post(uri, access_header, {
           "text": comment
+        })
+      end
+
+      def self.update_user_status(access_header, baseurl, project_key, repo_slug, request_id, user_slug, status)
+        uri = URI.parse("#{baseurl}/rest/api/1.0/projects/#{project_key}/repos/#{repo_slug}/pull-requests/#{request_id}/participants/#{user_slug}")
+        self.perform_put(uri, access_header, {
+          "status": status
         })
       end
     end
