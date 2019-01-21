@@ -19,7 +19,7 @@ module Fastlane
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
         http.set_debug_output($stdout)
 
-        res = http.request(request)
+        res = http.request(req)
 
         res
       end
@@ -37,7 +37,7 @@ module Fastlane
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
         http.set_debug_output($stdout)
 
-        res = http.request(request)
+        res = http.request(req)
 
         res
       end
