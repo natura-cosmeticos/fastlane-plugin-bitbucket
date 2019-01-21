@@ -114,6 +114,7 @@ module Fastlane
           ),
           FastlaneCore::ConfigItem.new(
             key: :user_slug,
+            env_name: "BITBUCKET_USER_SLUG",
             description: "The user slug to update status for",
             type: String,
             optional: true
