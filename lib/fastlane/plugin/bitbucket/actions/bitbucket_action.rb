@@ -34,7 +34,7 @@ module Fastlane
       end
 
       def self.description
-        "This action allows fastlane to interact with BitBucket Pull Requests. Currently approve, decline and comments are supported."
+        "This action allows fastlane to interact with BitBucket Pull Requests; Currently approve, decline and comments are supported"
       end
 
       def self.authors
@@ -75,14 +75,14 @@ module Fastlane
           FastlaneCore::ConfigItem.new(
             key: :access_token,
             env_name: "BITBUCKET_PERSONAL_ACCESS_TOKEN",
-            description: "A Personal Access Token from BitBucket for the account used. One of access_token or basic_creds must be specified; if both are supplied access_token is used.",
+            description: "A Personal Access Token from BitBucket for the account used. One of access_token or basic_creds must be specified; if both are supplied access_token is used",
             optional: true,
             type: String
           ),
           FastlaneCore::ConfigItem.new(
             key: :basic_creds,
             env_name: "BITBUCKET_BASIC_AUTH_CREDENTIALS",
-            description: "To use Basic Auth for Bitbuket provide a base64 encoded version of \"<username>:<password>\". One of access_token or basic_creds must be specified; if both are supplied access_token is used.",
+            description: "To use Basic Auth for Bitbuket provide a base64 encoded version of \"<username>:<password>\". One of access_token or basic_creds must be specified; if both are supplied access_token is used",
             optional: true,
             type: String
           ),
