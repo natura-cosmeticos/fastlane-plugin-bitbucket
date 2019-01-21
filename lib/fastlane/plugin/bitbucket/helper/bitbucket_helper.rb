@@ -15,9 +15,8 @@ module Fastlane
         req['Accept'] = 'application/json'
 
         http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = true
+        http.use_ssl = uri.instance_of? URI::HTTPS
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-        http.set_debug_output($stdout)
 
         res = http.request(req)
 
@@ -33,9 +32,9 @@ module Fastlane
         req.body = params.to_json
         
         http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = true
+        
+        http.use_ssl = uri.instance_of? URI::HTTPS
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-        http.set_debug_output($stdout)
 
         res = http.request(req)
 
