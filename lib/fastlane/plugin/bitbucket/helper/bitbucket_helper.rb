@@ -7,7 +7,7 @@ module Fastlane
 
   module Helper
     class BitbucketHelper
-      def self.perform_get(uri, pat, params)        
+      def self.perform_get(uri, access_header, params)        
         uri.query = URI.encode_www_form(params)
 
         req = Net::HTTP::Get.new(uri)
