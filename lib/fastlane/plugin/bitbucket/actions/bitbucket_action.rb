@@ -12,10 +12,10 @@ module Fastlane
         
         if params[:access_token] then
           token = params[:access_token]
-          auth_header = "Bearer #{token}"
+          auth_header = "Bearer #{token}".strip
         elsif params[:basic_creds] then
           creds = Base64.encode64(params[:basic_creds])
-          auth_header = "Basic #{creds}"
+          auth_header = "Basic #{creds}".strip
         else
           UI.user_error!("Either access_token or basic_creds must be supplied.")
           return
