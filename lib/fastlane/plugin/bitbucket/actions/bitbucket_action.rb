@@ -1,5 +1,6 @@
 require 'fastlane/action'
 require_relative '../helper/bitbucket_helper'
+require 'base64'
 
 module Fastlane
   module Actions
@@ -13,7 +14,7 @@ module Fastlane
           token = params[:access_token]
           auth_header = "Bearer #{token}"
         elsif params[:basic_creds] then
-          creds = params[:basic_creds]
+          creds = Base64.encode64(params[:basic_creds])
           auth_header = "Basic #{creds}"
         else
           UI.user_error!("Either access_token or basic_creds must be supplied.")
