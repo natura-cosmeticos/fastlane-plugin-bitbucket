@@ -7,14 +7,27 @@ module Fastlane
       def self.run(params)
         action = params[:action]
         request_id = params[:request_id]
+        auth_header = ""
+        
+        if params[:access_token] then
+          token = params[:access_token]
+          auth_header = "Bearer #{token}"
+        elsif params[:basic_creds] then
+          creds = params[:basic_creds]
+          auth_header = "Basic #{creds}"
+        else
+          UI.user_error!("Either access_token or basic_creds must be supplied.")
+          return
+        end
+        
         if action == 'comment' then
-          Helper::BitbucketHelper.comment_pull_request(params[:access_token], params[:base_url], params[:project_key], params[:repo_slug], params[:request_id], params[:message])
+          Helper::BitbucketHelper.comment_pull_request(auth_header, params[:base_url], params[:project_key], params[:repo_slug], params[:request_id], params[:message])
         elsif action == 'decline' then
-          Helper::BitbucketHelper.decline_pull_request(params[:access_token], params[:base_url], params[:project_key], params[:repo_slug], params[:request_id])
+          Helper::BitbucketHelper.decline_pull_request(auth_header, params[:base_url], params[:project_key], params[:repo_slug], params[:request_id])
         elsif action == 'approve' then
-          Helper::BitbucketHelper.approve_pull_request(params[:access_token], params[:base_url], params[:project_key], params[:repo_slug], params[:request_id])
+          Helper::BitbucketHelper.approve_pull_request(auth_header, params[:base_url], params[:project_key], params[:repo_slug], params[:request_id])
         elsif action == 'fetch' then
-          Helper::BitbucketHelper.fetch_pull_request(params[:access_token], params[:base_url], params[:project_key], params[:repo_slug], params[:request_id])
+          Helper::BitbucketHelper.fetch_pull_request(auth_header, params[:base_url], params[:project_key], params[:repo_slug], params[:request_id])
         else
           UI.user_error!("The action must be one of: comment, approve, decline")
         end
@@ -62,8 +75,15 @@ module Fastlane
           FastlaneCore::ConfigItem.new(
             key: :access_token,
             env_name: "BITBUCKET_PERSONAL_ACCESS_TOKEN",
-            description: "A Personal Access Token from BitBucket for the account used",
-            optional: false,
+            description: "A Personal Access Token from BitBucket for the account used. One of access_token or basic_creds must be specified; if both are supplied access_token is used.",
+            optional: true,
+            type: String
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :basic_creds,
+            env_name: "BITBUCKET_BASIC_AUTH_CREDENTIALS",
+            description: "To use Basic Auth for Bitbuket provide a base64 encoded version of \"<username>:<password>\". One of access_token or basic_creds must be specified; if both are supplied access_token is used.",
+            optional: true,
             type: String
           ),
           FastlaneCore::ConfigItem.new(
