@@ -7,6 +7,28 @@ module Fastlane
 
   module Helper
     class BitbucketHelper
+
+      def self.get_auth_header(params)
+        if params[:access_token] then
+          token = params[:access_token]
+          auth_header = "Bearer #{token}".strip
+        elsif params[:basic_creds] then
+          creds = Base64.encode64(params[:basic_creds])
+          auth_header = "Basic #{creds}".strip
+        else
+          UI.user_error!("Either access_token or basic_creds must be supplied.")
+          return
+        end
+      end
+
+      def self.response_handler(response)
+        if response.kind_of? Net::HTTPSuccess
+          UI.success "Bitbucket status request has response code: #{response.code}"
+        else
+          UI.error "Bitbucket status request has response code: #{response.code}"
+        end
+      end
+
       def self.perform_get(uri, access_header, params)        
         uri.query = URI.encode_www_form(params)
 
@@ -19,6 +41,7 @@ module Fastlane
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
         res = http.request(req)
+        self.response_handler(res)
 
         res
       end
@@ -37,6 +60,7 @@ module Fastlane
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
         res = http.request(req)
+        self.response_handler(res)
 
         res
       end
@@ -55,6 +79,7 @@ module Fastlane
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
         res = http.request(req)
+        self.response_handler(res)
 
         res
       end
@@ -99,6 +124,13 @@ module Fastlane
           "status": status
         })
       end
+
+      def self.set_commit_status(access_header, baseurl, commit, params)
+        uri = URI.parse("#{baseurl}/rest/build-status/1.0/commits/#{commit}")
+        self.perform_post(uri, access_header, params)
+      end
+
+
     end
   end
 end

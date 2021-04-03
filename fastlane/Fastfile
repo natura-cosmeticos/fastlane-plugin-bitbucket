@@ -1,3 +1,15 @@
 lane :test do
   bitbucket
+ 
+  bitbucket_commit_status(
+    base_url: "https://bitbucket-server-com",
+    commit: "0000000000000000000000000000000000000000",
+    commit_status_name: "This is test",
+    commit_key: "test",
+    commit_status: "SUCCESSFUL",
+    basic_creds: "username:password",
+    description: "description here",
+    description_url: "http://your-build.com",
+  )
+
 end
