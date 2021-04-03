@@ -4,22 +4,11 @@ require 'base64'
 
 module Fastlane
   module Actions
-    class BitbucketMergeRequestAction < Action
+    class BitbucketAction < Action
       def self.run(params)
         action = params[:action]
         request_id = params[:request_id]
-        auth_header = ""
-        
-        if params[:access_token] then
-          token = params[:access_token]
-          auth_header = "Bearer #{token}".strip
-        elsif params[:basic_creds] then
-          creds = Base64.encode64(params[:basic_creds])
-          auth_header = "Basic #{creds}".strip
-        else
-          UI.user_error!("Either access_token or basic_creds must be supplied.")
-          return
-        end
+        auth_header = Helper::BitbucketHelper.get_auth_header(params)
         
         if action == 'comment' then
           Helper::BitbucketHelper.comment_pull_request(auth_header, params[:base_url], params[:project_key], params[:repo_slug], params[:request_id], params[:message])
@@ -59,7 +48,10 @@ module Fastlane
             env_name: "BITBUCKET_BASE_URL",
             description: "The base URL for your BitBucket Server, including protocol",
             optional: false,
-            type: String
+            type: String,
+            verify_block: proc do |value|
+              UI.user_error!("Bitbucket Server url should use https") unless !!(value.match"^https://")
+            end
           ),
           FastlaneCore::ConfigItem.new(
             key: :project_key,
