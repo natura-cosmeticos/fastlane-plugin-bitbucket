@@ -85,7 +85,7 @@ module Fastlane
       end
 
       def self.fetch_pull_request(access_header, baseurl, project_key, repo_slug, request_id)
-        pruri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/pull-requests/#{request_id}")
+        pruri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/pullrequests/#{request_id}")
         prresp = self.perform_get(pruri, access_header, {})
         data = JSON.parse(prresp.body)
         data
@@ -100,26 +100,26 @@ module Fastlane
       def self.decline_pull_request(access_header, baseurl, project_key, repo_slug, request_id)
         version = self.get_pull_request_version(access_header, baseurl, project_key, repo_slug, request_id)
 
-        uri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/pull-requests/#{request_id}/decline")
+        uri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/pullrequests/#{request_id}/decline")
         res = self.perform_post(uri, access_header, {}, { version: version })
       end
 
       def self.approve_pull_request(access_header, baseurl, project_key, repo_slug, request_id)
         version = self.get_pull_request_version(access_header, baseurl, project_key, repo_slug, request_id)
         
-        uri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/pull-requests/#{request_id}/approve")
+        uri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/pullrequests/#{request_id}/approve")
         res = self.perform_post(uri, access_header, {}, { version: version })
       end
 
       def self.comment_pull_request(access_header, baseurl, project_key, repo_slug, request_id, comment)
-        uri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/pull-requests/#{request_id}/comments")
+        uri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/pullrequests/#{request_id}/comments")
         self.perform_post(uri, access_header, {
           "text": comment
         })
       end
 
       def self.update_user_status(access_header, baseurl, project_key, repo_slug, request_id, user_slug, status)
-        uri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/pull-requests/#{request_id}/participants/#{user_slug}")
+        uri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/pullrequests/#{request_id}/participants/#{user_slug}")
         self.perform_put(uri, access_header, {
           "status": status
         })
