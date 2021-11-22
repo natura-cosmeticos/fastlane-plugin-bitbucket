@@ -6,7 +6,6 @@ module Fastlane
   module Actions
     class BitbucketDeclineAction < Action
       def self.run(params)
-        action = params[:action]
         request_id = params[:request_id]
         auth_header = Helper::BitbucketHelper.get_auth_header(params)
         
