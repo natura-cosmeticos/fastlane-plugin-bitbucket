@@ -14,7 +14,6 @@ module Fastlane
           base_url = params[:base_url]
         else
           base_url = 'https://api.bitbucket.org'
-          return
         end
 
         if action == 'comment' then
