@@ -4,7 +4,7 @@ require 'base64'
 
 module Fastlane
   module Actions
-    class BitbucketAction < Action
+    class BitbucketApproveAction < Action
       def self.run(params)
         request_id = params[:request_id]
         auth_header = Helper::BitbucketHelper.get_auth_header(params)
