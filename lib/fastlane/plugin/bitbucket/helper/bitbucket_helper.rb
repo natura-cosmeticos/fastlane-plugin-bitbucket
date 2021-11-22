@@ -48,8 +48,6 @@ module Fastlane
 
       def self.perform_post(uri, access_header, params, query_params={})
         uri.query = URI.encode_www_form(query_params)
-        UI.success "Connecting to: #{uri..host}"
-
 
         req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
         req['Authorization'] = access_header
