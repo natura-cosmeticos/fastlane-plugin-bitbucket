@@ -10,16 +10,23 @@ module Fastlane
         request_id = params[:request_id]
         auth_header = Helper::BitbucketHelper.get_auth_header(params)
         
+        if params[:base_url] then
+          base_url = params[:base_url]
+        else
+          base_url = 'https://api.bitbucket.org'
+          return
+        end
+
         if action == 'comment' then
-          Helper::BitbucketHelper.comment_pull_request(auth_header, params[:base_url], params[:project_key], params[:repo_slug], params[:request_id], params[:message])
+          Helper::BitbucketHelper.comment_pull_request(auth_header, base_url, params[:project_key], params[:repo_slug], params[:request_id], params[:message])
         elsif action == 'decline' then
-          Helper::BitbucketHelper.decline_pull_request(auth_header, params[:base_url], params[:project_key], params[:repo_slug], params[:request_id])
+          Helper::BitbucketHelper.decline_pull_request(auth_header, base_url, params[:project_key], params[:repo_slug], params[:request_id])
         elsif action == 'approve' then
-          Helper::BitbucketHelper.approve_pull_request(auth_header, params[:base_url], params[:project_key], params[:repo_slug], params[:request_id])
+          Helper::BitbucketHelper.approve_pull_request(auth_header, base_url, params[:project_key], params[:repo_slug], params[:request_id])
         elsif action == 'fetch' then
-          Helper::BitbucketHelper.fetch_pull_request(auth_header, params[:base_url], params[:project_key], params[:repo_slug], params[:request_id])
+          Helper::BitbucketHelper.fetch_pull_request(auth_header, base_url, params[:project_key], params[:repo_slug], params[:request_id])
         elsif action == 'update_user_status' then
-          Helper::BitbucketHelper.update_user_status(auth_header, params[:base_url], params[:project_key], params[:repo_slug], params[:request_id], params[:user_slug], params[:status])
+          Helper::BitbucketHelper.update_user_status(auth_header, base_url, params[:project_key], params[:repo_slug], params[:request_id], params[:user_slug], params[:status])
         else
           UI.user_error!("The action must be one of: comment, approve, decline, fetch, or update_user_status")
         end
@@ -47,7 +54,7 @@ module Fastlane
             key: :base_url,
             env_name: "BITBUCKET_BASE_URL",
             description: "The base URL for your BitBucket Server, including protocol",
-            optional: false,
+            optional: true,
             type: String,
             verify_block: proc do |value|
               UI.user_error!("Bitbucket Server url should use https") unless !!(value.match"^https://")
