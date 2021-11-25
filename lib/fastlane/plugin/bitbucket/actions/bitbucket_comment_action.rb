@@ -76,8 +76,7 @@ module Fastlane
           ),
           FastlaneCore::ConfigItem.new(
             key: :message,
-            description: "The content of the comment; markdown formatted.",
-            default_value: "",
+            description: "The content of the comment; markdown formatted",
             type: String,
             optional: false
           ),

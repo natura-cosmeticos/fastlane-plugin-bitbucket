@@ -114,7 +114,9 @@ module Fastlane
       def self.comment_pull_request(access_header, baseurl, project_key, repo_slug, request_id, comment)
         uri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/pullrequests/#{request_id}/comments")
         self.perform_post(uri, access_header, {
-          "text": comment
+          "content": {
+            "raw": comment
+          }
         })
       end
 
