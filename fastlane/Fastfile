@@ -76,4 +76,12 @@ lane :test do
     destination_commit: "destination-commit-hash"
   )
 
+  bitbucket_list_comments(
+    base_url: "https://bitbucket-server-com",
+    project_key: 'myproject',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    request_id: 1
+  )
+
 end
