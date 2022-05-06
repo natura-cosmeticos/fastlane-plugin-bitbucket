@@ -1,0 +1,84 @@
+  bitbucket_approve(
+    base_url: "https://bitbucket-server-com",
+    project_key: 'myproject',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    request_id: 1
+  )
+
+  bitbucket_decline(
+    base_url: "https://bitbucket-server-com",
+    project_key: 'myproject',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    request_id: 1
+  )
+
+  bitbucket_fetch(
+    base_url: "https://bitbucket-server-com",
+    project_key: 'myproject',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    request_id: 1
+  )
+
+  bitbucket_comment(
+    base_url: "https://bitbucket-server-com",
+    project_key: 'myproject',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    request_id: 1,
+    message: "My comment message"
+  )
+
+  bitbucket_update_user_status(
+    base_url: "https://bitbucket-server-com",
+    project_key: 'myproject',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    request_id: 1,
+    user_slug: "myuser" ,
+    status: "NEEDS_WORK"
+  )
+
+  bitbucket_commit_status(
+    base_url: "https://bitbucket-server-com",
+    commit: "0000000000000000000000000000000000000000",
+    commit_status_name: "This is test",
+    commit_key: "test",
+    commit_status: "SUCCESSFUL",
+    basic_creds: "username:password",
+    description: "description here",
+    description_url: "http://your-build.com",
+  )
+
+  bitbucket_fetch_pull_requests(
+    project_key: 'my-project',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    status: "OPENED"
+  )
+
+  bitbucket_request_changes_status(
+    project_key: 'my-project',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    request_id: "1"
+  )
+
+  bitbucket_fetch_diffstat(
+    project_key: 'my-project',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    request_id: "1",
+    source_commit: "source-commit-hash",
+    destination_commit: "destination-commit-hash"
+  )
+
+  bitbucket_list_comments(
+    base_url: "https://bitbucket-server-com",
+    project_key: 'myproject',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    request_id: 1
+  )
