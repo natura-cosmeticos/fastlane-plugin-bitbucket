@@ -1,87 +1,36 @@
-lane :test do
-  bitbucket_approve(
-    base_url: "https://bitbucket-server-com",
-    project_key: 'myproject',
-    repo_slug: 'my-repo',
-    basic_creds: "username:password",
-    request_id: 1
+lane :is_working_in_progress do |options|
+  wip_text = options[:wip_text] ? options[:wip_text] : "WIP"
+
+  pr_details = bitbucket_fetch(
+    project_key: options[:project_key],
+    repo_slug: options[:repo_slug],
+    basic_creds: options[:basic_creds],
+    request_id: options[:request_id]
   )
 
-  bitbucket_decline(
-    base_url: "https://bitbucket-server-com",
-    project_key: 'myproject',
-    repo_slug: 'my-repo',
-    basic_creds: "username:password",
-    request_id: 1
+  pr_title = pr_details["rendered"]["title"]["raw"]
+
+  pr_title.include? wip_text
+end
+
+lane :has_comment_message do |options|
+  comments = bitbucket_list_comments(
+    project_key: options[:project_key],
+    repo_slug: options[:repo_slug],
+    basic_creds: options[:basic_creds],
+    request_id: options[:request_id]
   )
 
-  bitbucket_fetch(
-    base_url: "https://bitbucket-server-com",
-    project_key: 'myproject',
-    repo_slug: 'my-repo',
-    basic_creds: "username:password",
-    request_id: 1
-  )
+  comments_size = comments["size"]
+  has_comment_already = false
 
-  bitbucket_comment(
-    base_url: "https://bitbucket-server-com",
-    project_key: 'myproject',
-    repo_slug: 'my-repo',
-    basic_creds: "username:password",
-    request_id: 1,
-    message: "My comment message"
-  )
-
-  bitbucket_update_user_status(
-    base_url: "https://bitbucket-server-com",
-    project_key: 'myproject',
-    repo_slug: 'my-repo',
-    basic_creds: "username:password",
-    request_id: 1,
-    user_slug: "myuser" ,
-    status: "NEEDS_WORK"
-  )
-
-  bitbucket_commit_status(
-    base_url: "https://bitbucket-server-com",
-    commit: "0000000000000000000000000000000000000000",
-    commit_status_name: "This is test",
-    commit_key: "test",
-    commit_status: "SUCCESSFUL",
-    basic_creds: "username:password",
-    description: "description here",
-    description_url: "http://your-build.com",
-  )
-
-  bitbucket_fetch_pull_requests(
-    project_key: 'my-project',
-    repo_slug: 'my-repo',
-    basic_creds: "username:password",
-    status: "OPENED"
-  )
-
-  bitbucket_request_changes_status(
-    project_key: 'my-project',
-    repo_slug: 'my-repo',
-    basic_creds: "username:password",
-    request_id: "1"
-  )
-
-  bitbucket_fetch_diffstat(
-    project_key: 'my-project',
-    repo_slug: 'my-repo',
-    basic_creds: "username:password",
-    request_id: "1",
-    source_commit: "source-commit-hash",
-    destination_commit: "destination-commit-hash"
-  )
-
-  bitbucket_list_comments(
-    base_url: "https://bitbucket-server-com",
-    project_key: 'myproject',
-    repo_slug: 'my-repo',
-    basic_creds: "username:password",
-    request_id: 1
-  )
-
+  if comments_size > 0
+    comments["values"].each do |comment|
+      comment_text = comment["content"]["raw"]
+      if comment_text == options[:message]
+        has_comment_already = true
+      end
+    end
+  end
+  has_comment_already
 end
