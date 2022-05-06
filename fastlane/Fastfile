@@ -53,7 +53,7 @@ lane :test do
     description_url: "http://your-build.com",
   )
 
-  bitbucket_fetch_pullrequests(
+  bitbucket_fetch_pull_requests(
     project_key: 'my-project',
     repo_slug: 'my-repo',
     basic_creds: "username:password",

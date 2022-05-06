@@ -5,7 +5,7 @@ require 'base64'
 
 module Fastlane
   module Actions
-    class BitbucketFetchPullrequestsAction < Action
+    class BitbucketFetchPullRequestsAction < Action
       def self.run(params)
         auth_header = Helper::BitbucketHelper.get_auth_header(params)
         
@@ -24,8 +24,8 @@ module Fastlane
        else
           query_params = { }
        end
-      #  def self.fetch_pull_requests(access_header, baseurl, project_key, repo_slug, query_params)
-        Helper::BitbucketHelper.fetch_pull_requests(auth_header, base_url, params[:project_key], params[:repo_slug], query_params)
+        
+       Helper::BitbucketHelper.fetch_pull_requests(auth_header, base_url, params[:project_key], params[:repo_slug], query_params)
       end
 
       def self.description
