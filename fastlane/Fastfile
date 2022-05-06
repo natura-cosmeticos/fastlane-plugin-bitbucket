@@ -53,4 +53,27 @@ lane :test do
     description_url: "http://your-build.com",
   )
 
+  bitbucket_fetch_pull_requests(
+    project_key: 'my-project',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    status: "OPENED"
+  )
+
+  bitbucket_request_changes_status(
+    project_key: 'my-project',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    request_id: "1"
+  )
+
+  bitbucket_fetch_diffstat(
+    project_key: 'my-project',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    request_id: "1",
+    source_commit: "source-commit-hash",
+    destination_commit: "destination-commit-hash"
+  )
+
 end
