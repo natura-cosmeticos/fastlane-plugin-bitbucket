@@ -84,4 +84,12 @@ lane :test do
     request_id: 1
   )
 
+  is_wip = bitbucket_fetch_is_pr_on_wip(
+    base_url: "https://bitbucket-server-com",
+    project_key: 'myproject',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    request_id: 1,
+    wip_text: "[WIP]"
+  )
 end
