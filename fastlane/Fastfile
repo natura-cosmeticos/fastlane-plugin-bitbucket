@@ -92,4 +92,13 @@ lane :test do
     request_id: 1,
     wip_text: "[WIP]"
   )
+
+  has_commented_already = bitbucket_pull_request_has_comment( 
+    base_url: "https://bitbucket-server-com",
+    project_key: 'myproject',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    request_id: 1,
+    message: "My comment"
+  )
 end
