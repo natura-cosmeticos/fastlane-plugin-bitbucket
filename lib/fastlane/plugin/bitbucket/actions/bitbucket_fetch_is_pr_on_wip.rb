@@ -1,37 +1,38 @@
-require 'fastlane/action'
-require_relative '../helper/bitbucket_helper'
-require 'base64'
-
 module Fastlane
   module Actions
-    class BitbucketListCommentsAction < Action
+    module SharedValues
+      BITBUCKET_FETCH_IS_PR_ON_WIP_CUSTOM_VALUE = :BITBUCKET_FETCH_IS_PR_ON_WIP_CUSTOM_VALUE
+    end
+
+    class BitbucketFetchIsPrOnWipAction < Action
       def self.run(params)
-        request_id = params[:request_id]
         auth_header = Helper::BitbucketHelper.get_auth_header(params)
-        
+
         if params[:base_url] then
           base_url = params[:base_url]
         else
           base_url = 'https://api.bitbucket.org'
         end
 
-        Helper::BitbucketHelper.list_pull_request_comments(auth_header, base_url, params[:project_key], params[:repo_slug], params[:request_id])
+        if params[:wip_text] then
+          wip_text = params[:wip_text]
+        else
+          wip_text = "WIP"
+        end
+
+        pr_details = Helper::BitbucketHelper.fetch_pull_request(auth_header, base_url, params[:project_key], params[:repo_slug], params[:request_id])
+
+        pr_title = pr_details["rendered"]["title"]["raw"]
+
+        pr_title.include? wip_text
       end
 
       def self.description
-        "This action allows fastlane to fetch all comments from a Pull Request."
+        "This action allows fastlane to fetch if a Pull Requests has 'WIP' or a specific custom word on it's title."
       end
 
       def self.authors
-        ["Marcel Ball, Daniel Nazareth, Igor Matos"]
-      end
-
-      def self.return_value
-        # If your method provides a return value, you can describe here what it does
-      end
-
-      def self.details
-
+        ["Daniel Nazareth, Igor Matos"]
       end
 
       def self.available_options
@@ -79,8 +80,19 @@ module Fastlane
             description: "The pull request id number",
             type: Integer,
             optional: false
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :wip_text,
+            env_name: "BITBUCKET_TITLE_WORK_IN_PROGRESS_KEY",
+            description: "A specific key that should be on the Pull Request title in order to identify that it is a Work In Progress",
+            optional: true,
+            type: String
           )
         ]
+      end
+
+      def self.return_value
+        "This action returns if the Pull Request title contains the word defined as the 'WIP' trigger"
       end
 
       def self.is_supported?(platform)

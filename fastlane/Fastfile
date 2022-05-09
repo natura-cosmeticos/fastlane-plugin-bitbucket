@@ -76,7 +76,7 @@ lane :test do
     destination_commit: "destination-commit-hash"
   )
 
-  bitbucket_list_comments(
+  bitbucket_list_comments_first_page(
     base_url: "https://bitbucket-server-com",
     project_key: 'myproject',
     repo_slug: 'my-repo',
@@ -84,4 +84,21 @@ lane :test do
     request_id: 1
   )
 
+  is_wip = bitbucket_fetch_is_pr_on_wip(
+    base_url: "https://bitbucket-server-com",
+    project_key: 'myproject',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    request_id: 1,
+    wip_text: "[WIP]"
+  )
+
+  has_commented_already = bitbucket_pull_request_has_comment( 
+    base_url: "https://bitbucket-server-com",
+    project_key: 'myproject',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    request_id: 1,
+    message: "My comment"
+  )
 end
