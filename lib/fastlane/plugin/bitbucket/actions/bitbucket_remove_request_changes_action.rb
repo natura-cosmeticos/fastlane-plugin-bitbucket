@@ -4,7 +4,7 @@ require 'base64'
 
 module Fastlane
   module Actions
-    class BitbucketRequestChangesAction < Action
+    class BitbucketRemoveRequestChangesAction < Action
       def self.run(params)
         request_id = params[:request_id]
         auth_header = Helper::BitbucketHelper.get_auth_header(params)
@@ -15,11 +15,11 @@ module Fastlane
           base_url = 'https://api.bitbucket.org'
         end
 
-        Helper::BitbucketHelper.request_changes_pull_request(auth_header, base_url, params[:project_key], params[:repo_slug], params[:request_id])
+        Helper::BitbucketHelper.remove_request_changes_pull_request(auth_header, base_url, params[:project_key], params[:repo_slug], params[:request_id])
       end
 
       def self.description
-        "This action allows fastlane to request changes on BitBucket Pull Requests."
+        "This action allows fastlane to remove 'request changes' on BitBucket Pull Requests."
       end
 
       def self.authors
