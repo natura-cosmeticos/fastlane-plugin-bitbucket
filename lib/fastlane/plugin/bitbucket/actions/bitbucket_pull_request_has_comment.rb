@@ -15,7 +15,7 @@ module Fastlane
           base_url = 'https://api.bitbucket.org'
         end
 
-        comments = Helper::BitbucketHelper.list_pull_request_comments(auth_header, base_url, params[:project_key], params[:repo_slug], params[:request_id])
+        comments = Helper::BitbucketHelper.list_pull_request_comments(auth_header, base_url, params[:project_key], params[:repo_slug], params[:request_id], 100)
 
         comments_size = comments["size"]
         has_comment_already = false
