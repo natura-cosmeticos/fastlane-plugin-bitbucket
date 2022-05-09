@@ -15,8 +15,8 @@ module Fastlane
           base_url = 'https://api.bitbucket.org'
         end
 
-       if params[:status] then
-          query_params = { status: params[:status] }
+       if params[:state] then
+          query_params = { state: params[:state] }
        else
           query_params = { }
        end
@@ -81,9 +81,9 @@ module Fastlane
             type: String
           ),
           FastlaneCore::ConfigItem.new(
-            key: :status,
-            env_name: "BITBUCKET_FETCH_PULL_REQUESTS_STATUS",
-            description: "Filter pull requests by status, e.g: OPEN, MERGED or DECLINED",
+            key: :state,
+            env_name: "BITBUCKET_FETCH_PULL_REQUESTS_STATE",
+            description: "Filter pull requests by state, e.g: OPEN, MERGED or DECLINED",
             optional: true,
             type: String
           )
