@@ -76,7 +76,7 @@ lane :test do
     destination_commit: "destination-commit-hash"
   )
 
-  bitbucket_list_comments(
+  bitbucket_list_comments_first_page(
     base_url: "https://bitbucket-server-com",
     project_key: 'myproject',
     repo_slug: 'my-repo',
