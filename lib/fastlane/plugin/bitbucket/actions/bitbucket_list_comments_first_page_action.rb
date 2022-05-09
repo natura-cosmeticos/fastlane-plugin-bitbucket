@@ -4,7 +4,7 @@ require 'base64'
 
 module Fastlane
   module Actions
-    class BitbucketListCommentsAction < Action
+    class BitbucketListCommentsFirstPageAction < Action
       def self.run(params)
         request_id = params[:request_id]
         auth_header = Helper::BitbucketHelper.get_auth_header(params)
@@ -15,11 +15,17 @@ module Fastlane
           base_url = 'https://api.bitbucket.org'
         end
 
-        Helper::BitbucketHelper.list_pull_request_comments(auth_header, base_url, params[:project_key], params[:repo_slug], params[:request_id])
+        if params[:lenght] then
+          lenght = params[:lenght]
+        else
+          lenght = 100
+        end
+
+        Helper::BitbucketHelper.list_pull_request_comments(auth_header, base_url, params[:project_key], params[:repo_slug], params[:request_id], lenght)
       end
 
       def self.description
-        "This action allows fastlane to fetch all comments from a Pull Request."
+        "This action allows fastlane to fetch the first page of comments from a Pull Request."
       end
 
       def self.authors
@@ -27,7 +33,7 @@ module Fastlane
       end
 
       def self.return_value
-        # If your method provides a return value, you can describe here what it does
+        "This action returns the first page of comments from a Pull Request."
       end
 
       def self.details
@@ -79,6 +85,12 @@ module Fastlane
             description: "The pull request id number",
             type: Integer,
             optional: false
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :lenght,
+            description: "The max number of comments per page to retrieve. Maximum of 100, minimum of 10",
+            type: Integer,
+            optional: true
           )
         ]
       end
