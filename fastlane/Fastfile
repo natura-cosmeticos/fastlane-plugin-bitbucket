@@ -60,7 +60,7 @@ lane :test do
     status: "OPENED"
   )
 
-  bitbucket_request_changes_status(
+  bitbucket_request_changes(
     project_key: 'my-project',
     repo_slug: 'my-repo',
     basic_creds: "username:password",
@@ -100,5 +100,12 @@ lane :test do
     basic_creds: "username:password",
     request_id: 1,
     message: "My comment"
+  )
+
+  bitbucket_remove_request_changes(
+    project_key: 'my-project',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    request_id: "1"
   )
 end
