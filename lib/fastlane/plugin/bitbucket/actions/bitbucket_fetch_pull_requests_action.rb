@@ -9,10 +9,6 @@ module Fastlane
       def self.run(params)
         auth_header = Helper::BitbucketHelper.get_auth_header(params)
         
-        puts "paramssss"
-        puts params.to_s
-        puts "paramssss"
-
         if params[:base_url] then
           base_url = params[:base_url]
         else
@@ -33,7 +29,7 @@ module Fastlane
       end
 
       def self.authors
-        ["Marcel Ball, Daniel Nazareth, Igor Matos"]
+        ["Daniel Nazareth, Igor Matos"]
       end
 
       def self.return_value
