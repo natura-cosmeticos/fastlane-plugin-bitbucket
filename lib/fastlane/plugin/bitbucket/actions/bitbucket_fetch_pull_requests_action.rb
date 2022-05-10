@@ -15,13 +15,12 @@ module Fastlane
           base_url = 'https://api.bitbucket.org'
         end
 
-       if params[:state] then
-          query_params = { state: params[:state] }
-       else
-          query_params = { }
-       end
+        state = params[:state] ? params[:state] : "OPEN"
+        length = params[:length] ? params[:length] : 10
+
+        query_params = { state: state, pagelen: length } 
         
-       Helper::BitbucketHelper.fetch_pull_requests(auth_header, base_url, params[:project_key], params[:repo_slug], query_params)
+        Helper::BitbucketHelper.fetch_pull_requests(auth_header, base_url, params[:project_key], params[:repo_slug], query_params)
       end
 
       def self.description
@@ -86,6 +85,12 @@ module Fastlane
             description: "Filter pull requests by state, e.g: OPEN, MERGED or DECLINED",
             optional: true,
             type: String
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :length,
+            description: "The max number of pull requests per page to retrieve. Maximum of 100, minimum of 10",
+            type: Integer,
+            optional: true
           )
         ]
       end

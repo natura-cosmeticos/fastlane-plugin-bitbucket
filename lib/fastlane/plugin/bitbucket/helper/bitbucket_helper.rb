@@ -167,9 +167,9 @@ module Fastlane
         })
       end
 
-      def self.list_pull_request_comments(access_header, baseurl, project_key, repo_slug, request_id, lenght)
+      def self.list_pull_request_comments(access_header, baseurl, project_key, repo_slug, request_id, length)
         uri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/pullrequests/#{request_id}/comments")
-        prresp = self.perform_get(uri, access_header, { pagelen: lenght })
+        prresp = self.perform_get(uri, access_header, { pagelen: length })
         data = JSON.parse(prresp.body)
         data
       end
