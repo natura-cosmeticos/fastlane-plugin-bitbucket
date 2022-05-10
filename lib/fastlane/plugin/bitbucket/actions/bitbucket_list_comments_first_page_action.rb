@@ -15,13 +15,13 @@ module Fastlane
           base_url = 'https://api.bitbucket.org'
         end
 
-        if params[:lenght] then
-          lenght = params[:lenght]
+        if params[:length] then
+          length = params[:length]
         else
-          lenght = 100
+          length = 100
         end
 
-        Helper::BitbucketHelper.list_pull_request_comments(auth_header, base_url, params[:project_key], params[:repo_slug], params[:request_id], lenght)
+        Helper::BitbucketHelper.list_pull_request_comments(auth_header, base_url, params[:project_key], params[:repo_slug], params[:request_id], length)
       end
 
       def self.description
@@ -87,7 +87,7 @@ module Fastlane
             optional: false
           ),
           FastlaneCore::ConfigItem.new(
-            key: :lenght,
+            key: :length,
             description: "The max number of comments per page to retrieve. Maximum of 100, minimum of 10",
             type: Integer,
             optional: true

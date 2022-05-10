@@ -57,7 +57,8 @@ lane :test do
     project_key: 'my-project',
     repo_slug: 'my-repo',
     basic_creds: "username:password",
-    status: "OPENED"
+    status: "OPENED",
+    length: 10
   )
 
   bitbucket_request_changes(
