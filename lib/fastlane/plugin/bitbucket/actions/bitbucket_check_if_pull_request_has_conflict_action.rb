@@ -29,19 +29,11 @@ module Fastlane
       end
 
       def self.description
-        "This action allows fastlane to update user status with BitBucket Pull Requests."
+        "This action checks if pull request has any file with conflict"
       end
 
       def self.authors
         ["Daniel Nazareth, Igor Matos"]
-      end
-
-      def self.return_value
-        # If your method provides a return value, you can describe here what it does
-      end
-
-      def self.details
-
       end
 
       def self.available_options
