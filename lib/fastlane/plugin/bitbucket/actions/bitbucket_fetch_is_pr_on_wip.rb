@@ -24,7 +24,7 @@ module Fastlane
 
         pr_title = pr_details["rendered"]["title"]["raw"]
 
-        pr_title.include? wip_text
+        pr_title.downcase.include? wip_text.downcase
       end
 
       def self.description
