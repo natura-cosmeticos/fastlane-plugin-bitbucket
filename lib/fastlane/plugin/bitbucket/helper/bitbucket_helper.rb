@@ -186,6 +186,12 @@ module Fastlane
         self.perform_post(uri, access_header, params)
       end
 
+      def self.get_branching_model(access_header, baseurl, project_key, repo_slug)
+         uri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/branching-model")
+         prresp = self.perform_get(uri, access_header, {})
+         data = JSON.parse(prresp.body)
+         data
+      end
 
     end
   end
