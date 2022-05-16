@@ -1,34 +1,35 @@
+require 'fastlane/action'
+require_relative '../helper/bitbucket_helper'
+require 'base64'
+
 module Fastlane
   module Actions
-    module SharedValues
-      BITBUCKET_FETCH_IS_PR_ON_WIP_CUSTOM_VALUE = :BITBUCKET_FETCH_IS_PR_ON_WIP_CUSTOM_VALUE
-    end
-
-    class BitbucketFetchIsPrOnWipAction < Action
+    class BitbucketCheckIfPullRequestHasConflictAction < Action
       def self.run(params)
+        request_id = params[:request_id]
         auth_header = Helper::BitbucketHelper.get_auth_header(params)
-
+        
         if params[:base_url] then
           base_url = params[:base_url]
         else
           base_url = 'https://api.bitbucket.org'
         end
 
-        if params[:wip_text] then
-          wip_text = params[:wip_text]
-        else
-          wip_text = "WIP"
+        diffstat = Helper::BitbucketHelper.fetch_diffstat(auth_header, base_url, params[:project_key], params[:repo_slug], params[:request_id], params[:source_commit], params[:destination_commit])
+      
+        has_conflict = false
+
+        diffstat["values"].each do |file|
+          if file["status"] == "merge conflict"
+            has_conflict = true
+          end
         end
 
-        pr_details = Helper::BitbucketHelper.fetch_pull_request(auth_header, base_url, params[:project_key], params[:repo_slug], params[:request_id])
-
-        pr_title = pr_details["rendered"]["title"]["raw"]
-
-        pr_title.downcase.include? wip_text.downcase
+        has_conflict
       end
 
       def self.description
-        "This action allows fastlane to fetch if a Pull Requests has 'WIP' or a specific custom word on it's title."
+        "This action checks if pull request has any file with conflict"
       end
 
       def self.authors
@@ -82,17 +83,21 @@ module Fastlane
             optional: false
           ),
           FastlaneCore::ConfigItem.new(
-            key: :wip_text,
-            env_name: "BITBUCKET_TITLE_WORK_IN_PROGRESS_KEY",
-            description: "A specific key that should be on the Pull Request title in order to identify that it is a Work In Progress",
-            optional: true,
+            key: :source_commit,
+            env_name: "BITBUCKET_DIFFSTAT_SOURCE_COMMIT",
+            description: "The hash of commit from origin branch",
+            optional: false,
+            type: String
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :destination_commit,
+            env_name: "BITBUCKET_DIFFSTAT_DESTINATION_COMMIT",
+            description: "The hash of commit from destination branch",
+            optional: false,
             type: String
           )
+      
         ]
-      end
-
-      def self.return_value
-        "This action returns if the Pull Request title contains the word defined as the 'WIP' trigger"
       end
 
       def self.is_supported?(platform)

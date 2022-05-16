@@ -174,6 +174,13 @@ module Fastlane
         data
       end
 
+      def self.fetch_default_reviewers(access_header, baseurl, project_key, repo_slug)
+        uri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/default-reviewers")
+        prresp = self.perform_get(uri, access_header, { })
+        data = JSON.parse(prresp.body)
+        data
+      end
+
       def self.update_user_status(access_header, baseurl, project_key, repo_slug, request_id, user_slug, status)
         uri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/pullrequests/#{request_id}/participants/#{user_slug}")
         self.perform_put(uri, access_header, {
