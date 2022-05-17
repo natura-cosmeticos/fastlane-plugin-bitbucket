@@ -121,4 +121,10 @@ lane :test do
     repo_slug: 'my-repo',
     basic_creds: "username:password",
     request_id: "pr-id")
+
+  bitbucket_get_development_branch(
+    project_key: 'my-project',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password"
+  )
 end
