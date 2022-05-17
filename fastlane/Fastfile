@@ -115,4 +115,11 @@ lane :test do
     repo_slug: 'my-repo',
     basic_creds: "username:password"
   )
+  
+  bitbucket_fetch_pull_request_by_id(
+    project_key: 'my-project',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    request_id: 2308)
+
 end
