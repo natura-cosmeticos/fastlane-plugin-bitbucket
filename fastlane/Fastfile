@@ -120,6 +120,5 @@ lane :test do
     project_key: 'my-project',
     repo_slug: 'my-repo',
     basic_creds: "username:password",
-    request_id: 2308)
-
+    request_id: "pr-id")
 end
