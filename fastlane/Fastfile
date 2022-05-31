@@ -134,4 +134,13 @@ lane :test do
     basic_creds: "username:password",
     request_id: "pr-id"
   )
+
+  bitbucket_fetch_changed_lines_between_two_commits(
+    project_key: 'my-project',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password"
+    source_commit: "abcd1234",
+    destination_commit: "efgh5678",
+    prefix: "+"
+  )
 end
