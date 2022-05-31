@@ -27,7 +27,7 @@ module Fastlane
       end
 
       def self.return_value
-        "The return value is the detail of a custom Pull Request"
+        "The return value is the listing of files changed in a pull request"
       end
 
       def self.available_options
