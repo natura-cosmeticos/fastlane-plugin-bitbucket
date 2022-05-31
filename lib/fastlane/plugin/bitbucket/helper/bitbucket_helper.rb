@@ -29,7 +29,9 @@ module Fastlane
         end
       end
 
-      def self.perform_get(uri, access_header, params)        
+      def self.perform_get(uri, access_header, params, limit = 10)     
+        raise ArgumentError, 'HTTP redirect too deep' if limit == 0
+        
         uri.query = URI.encode_www_form(params)
 
         req = Net::HTTP::Get.new(uri)
@@ -40,10 +42,14 @@ module Fastlane
         http.use_ssl = uri.instance_of? URI::HTTPS
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-        res = http.request(req)
-        self.response_handler(res)
+        response = http.request(req)
+        self.response_handler(response)
 
-        res
+        while response.is_a?(Net::HTTPRedirection) && limit >= 0
+          response = self.perform_get(URI.parse(response['location']), access_header, params, limit -1)
+        end 
+
+        response
       end
 
       def self.perform_post(uri, access_header, params, query_params={})
@@ -119,6 +125,13 @@ module Fastlane
 
       def self.fetch_diffstat(access_header, baseurl, project_key, repo_slug, request_id, source_commit, destination_commit)
         pruri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/diffstat/#{project_key}/#{repo_slug}:#{source_commit}%0D#{destination_commit}")
+        prresp = self.perform_get(pruri, access_header, { from_pullrequest_id: request_id })
+        data = JSON.parse(prresp.body)
+        data
+      end
+
+      def self.fetch_pull_request_changed_files(access_header, baseurl, project_key, repo_slug, request_id)
+        pruri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/pullrequests/#{request_id}/diffstat")
         prresp = self.perform_get(pruri, access_header, { from_pullrequest_id: request_id })
         data = JSON.parse(prresp.body)
         data
