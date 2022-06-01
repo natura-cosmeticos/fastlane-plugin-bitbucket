@@ -14,21 +14,20 @@ module Fastlane
         else
           base_url = 'https://api.bitbucket.org'
         end
+    
+        changed_lines = Helper::BitbucketHelper.compare_two_commits(auth_header, base_url, params[:project_key], params[:repo_slug], params[:source_commit], params[:destination_commit])
 
+        
         if params[:prefix] then
           prefix = params[:prefix]
         else
           prefix = ''
         end
-    
-        changed_lines = Helper::BitbucketHelper.compare_two_commits(auth_header, base_url, params[:project_key], params[:repo_slug], params[:source_commit], params[:destination_commit])
 
-        lines_with_prefix = ""
-        changed_lines.each_line do |line|
-          if line.start_with?(prefix)
-            lines_with_prefix.concat(line.delete_prefix(prefix))
-          end
-        end
+        lines_with_prefix = Fastlane::Actions::FilterStringLineByPrefixAction.run(
+          prefix: prefix,
+          text: changed_lines
+        )
 
         lines_with_prefix
       end
