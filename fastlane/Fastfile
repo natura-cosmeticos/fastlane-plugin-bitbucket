@@ -138,9 +138,19 @@ lane :test do
   bitbucket_fetch_changed_lines_between_two_commits(
     project_key: 'my-project',
     repo_slug: 'my-repo',
-    basic_creds: "username:password"
+    basic_creds: "username:password",
     source_commit: "abcd1234",
     destination_commit: "efgh5678",
     prefix: "+"
+  )
+    text = "+ first line
++ second line
+- third line
+fourth line
++ fifth line"
+
+  filter_string_line_by_prefix(
+    prefix: "+",
+    text: text
   )
 end
