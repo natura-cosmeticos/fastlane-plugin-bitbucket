@@ -213,6 +213,12 @@ module Fastlane
          data
       end
 
+      def self.compare_two_commits(access_header, baseurl, project_key, repo_slug, source_commit, destination_commit)
+        uri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/diff/#{source_commit}%0D#{destination_commit}")
+        prresp = self.perform_get(uri, access_header, {})
+        data = prresp.body
+        data
+     end
     end
   end
 end
