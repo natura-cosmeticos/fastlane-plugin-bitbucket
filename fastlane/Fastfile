@@ -153,4 +153,14 @@ fourth line
     prefix: "+",
     text: text
   )
+
+  bitbucket_open_pull_request(
+    base_url: "https://api.bitbucket.org",
+    project_key: 'my-project',
+    repo_slug: 'my-repo',
+    basic_creds: "username:password",
+    title: "My PR Title",
+    source_branch: "my-new-branch-name",
+    destination_branch: "main"
+  )
 end
