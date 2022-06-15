@@ -219,6 +219,24 @@ module Fastlane
         data = prresp.body
         data
      end
+
+     def self.open_pull_request(access_header, baseurl, project_key, repo_slug, title, source_branch, destination_branch, close_source_branch=true)
+      uri = URI.parse("#{baseurl}/2.0/repositories/#{project_key}/#{repo_slug}/pullrequests")
+      self.perform_post(uri, access_header, {
+        "title": "#{title}",
+        "source": {
+            "branch": {
+                "name": "#{source_branch}"
+            }
+        },
+        "destination": {
+            "branch": {
+                "name": "#{destination_branch}"
+            }
+        },
+        "close_source_branch": close_source_branch
+      })
+    end
     end
   end
 end
